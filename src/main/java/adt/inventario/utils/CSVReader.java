@@ -25,10 +25,11 @@ public class CSVReader {
             while((line = reader.readLine()) != null){
                 line = line.toLowerCase();
                 product = new Product(line.split(";", 2)[1], Integer.parseInt(line.split(";", 2)[0]));
-                if (!pojo.hasProduct(product.getName()).isEmpty()){
+                if (pojo.hasProduct(product.getName()) != 0){
                     pojo.addProduct(product);
                 }else {
-
+                    product.setAmount(product.getAmount() + 1);
+                    pojo.updateProduct(product);
                 }
             }
         } catch (IOException ioex) {
