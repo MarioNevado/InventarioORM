@@ -8,12 +8,19 @@ import java.util.List;
 
 public interface ProductDAO {
     void addProduct(Product product) throws HibernateException;
-    void updateProduct(Product product);
-    List<Product> list();
+
+    void updateProduct(Product product) throws HibernateException;
+
+    List<Product> list() throws HibernateException;
+
     void use(int number, String productName) throws UsedUnitsExceedException;
-    void removeProduct(String productName);
-    long hasProduct(String productName);
+
+    void removeProduct(String productName) throws HibernateException;
+
+    long hasProduct(String productName) throws HibernateException;
+
     void getProduct(String productName);
-    Object[] getProductByName(String productName);
+
+    Object[] getProductByName(String productName) throws HibernateException;
 
 }
