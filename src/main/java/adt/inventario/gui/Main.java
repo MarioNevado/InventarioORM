@@ -1,10 +1,9 @@
 package adt.inventario.gui;
 
 
+import adt.inventario.pojo.ProductPojo;
 import adt.inventario.utils.CSVReader;
-
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -33,21 +32,59 @@ o parando el proceso de ejecución.
  */
 
 public class Main {
+    static ProductPojo pojo;
+
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         String command;
-        CSVReader csv;
+        pojo = new ProductPojo();
+        try {
+            new CSVReader(new File("files/compra.csv"));
+        } catch (IOException io) {
+            io.printStackTrace();
+        }
         do {
             System.out.print("-> ");
-            command = sc.nextLine();
-            if(!command.equalsIgnoreCase("salir")){
-                try {
-                    csv = new CSVReader(new File("files/compra.csv"));
-
-                }catch(Exception e){
-                    e.printStackTrace();
-                }
+            command = sc.nextLine().toLowerCase();
+            if (!command.equalsIgnoreCase("salir")) {
+                selectOption(command);
             }
-        }while(!command.equalsIgnoreCase("salir"));
+        } while (!command.equalsIgnoreCase("salir"));
     }
+
+    private static void selectOption(String command) {
+        try {
+            if (command.equals("listar")) {
+                pojo.list();
+            } else if (command.matches("^usar [0-9]+ [a-z]+$")) {
+                useProduct(command);
+            } else if (command.matches("^hay [a-z]+$")) {
+                hasProduct(command);
+            } else if (command.matches(("adquirir [a-z]+"))) {
+                pojo.getProduct(command.split(" ", 2)[1]);
+            } else {
+                System.err.println("COMANDO INCORRECTO");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    private static void hasProduct(String command){
+        String product = command.split(" ", 3)[2];
+        System.out.println(pojo.hasProduct(product));
+    }
+    private static void useProduct(String command) {
+        String product;
+        int number;
+        try {
+            number = Integer.parseInt(command.split(" ", 3)[1]);
+            product = command.split(" ", 3)[2];
+            pojo.use(number, product);
+        } catch (NumberFormatException nf) {
+            System.err.println("Debe pasar un número como parámetro");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
