@@ -15,6 +15,11 @@ public class Product {
 
     public Product() {}
 
+    @Override
+    public String toString() {
+        return name + ": " + amount;
+    }
+
     public Product(String name, int amount) {
         this.name = name;
         this.amount = amount;
