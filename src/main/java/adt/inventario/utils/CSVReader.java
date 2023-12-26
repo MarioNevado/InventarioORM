@@ -24,12 +24,12 @@ public class CSVReader {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             reader.readLine();
             while((line = reader.readLine()) != null){
-                line = line.toLowerCase();
+                line = line.toLowerCase().trim();
                 product = new Product(line.split(";", 2)[1], Integer.parseInt(line.split(";", 2)[0]));
-                if (pojo.hasProduct(product.getName()) != 0){
+                if (pojo.hasProduct(product) == 0){
                     pojo.addProduct(product);
                 }else {
-                    product.setAmount(product.getAmount() + 1);
+                    product.setAmount((int)pojo.hasProduct(product) + product.getAmount());
                     pojo.updateProduct(product);
                 }
             }
