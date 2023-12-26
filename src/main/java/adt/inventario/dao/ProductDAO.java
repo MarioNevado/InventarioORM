@@ -17,7 +17,7 @@ public interface ProductDAO {
 
     void removeProduct(String productName) throws HibernateException;
 
-    long hasProduct(String productName) throws HibernateException;
+    long hasProduct(Product product) throws HibernateException;
 
     void getProduct(String productName);
 
