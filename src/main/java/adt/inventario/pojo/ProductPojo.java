@@ -39,7 +39,7 @@ public class ProductPojo implements ProductDAO {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
-            product.setAmount((int)hasProduct(product.getName()) + product.getAmount());
+            product.setId(getId(product));
             session.merge(product);
             tx.commit();
             System.out.println("Actualizado el producto " + product.getName() + " con cantidad de " + product.getAmount());
@@ -91,12 +91,12 @@ public class ProductPojo implements ProductDAO {
     }
 
     @Override
-    public long hasProduct(String productName) throws HibernateException{
+    public long hasProduct(Product product) throws HibernateException{
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder cb = session.getCriteriaBuilder(); //constructor
             CriteriaQuery<Long> cQuery = cb.createQuery(Long.class); //query que indica que devolverá long
             Root<Product> root = cQuery.from(Product.class); // referencia la clase de origen de la consulta
-            cQuery.select(cb.count(root)).where(cb.equal(root.get("name"),  productName)).orderBy(cb.asc(root.get("name")));
+            cQuery.select(cb.count(root)).where(cb.equal(root.get("name"), product.getName()));
             Query<Long> query = session.createQuery(cQuery);
             return query.getSingleResult();
         } catch (HibernateException h) {
@@ -107,7 +107,7 @@ public class ProductPojo implements ProductDAO {
     @Override
     public void getProduct(String productName) {
         Product product;
-        if (hasProduct(productName) != 0) {
+        if (hasProduct(new Product(productName, 1)) != 0) {
             product = new Product((String) getProductByName(productName)[0], (Integer) getProductByName(productName)[1]);
             product.setAmount(product.getAmount() + 1);
             updateProduct(product);
@@ -136,6 +136,20 @@ public class ProductPojo implements ProductDAO {
             Root<Product> root = criteriaQuery.from(Product.class);
             criteriaQuery.select(root.get("id")).where(cb.equal(root.get("name"), product.getName()));
             Query<Integer> query = session.createQuery(criteriaQuery);
+            return query.getSingleResult();
+        }catch (HibernateException h){
+            throw h;
+        }
+    }
+
+    @Override
+    public Long containsProduct(Product product) throws HibernateException {
+        try(Session session = HibernateUtil.getSessionFactory().openSession()){
+            CriteriaBuilder cb = session.getCriteriaBuilder();
+            CriteriaQuery<Long> criteriaQuery = cb.createQuery(Long.class);
+            Root<Product> root = criteriaQuery.from(Product.class);
+            criteriaQuery.select(cb.count(root)).where(cb.equal(root.get("name"), product.getName()));
+            Query<Long> query = session.createQuery(criteriaQuery);
             return query.getSingleResult();
         }catch (HibernateException h){
             throw h;
