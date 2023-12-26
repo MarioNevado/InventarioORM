@@ -15,7 +15,7 @@ public interface ProductDAO {
 
     void use(int number, String productName) throws UsedUnitsExceedException;
 
-    void removeProduct(String productName) throws HibernateException;
+    void removeProduct(Product product) throws HibernateException;
 
     long hasProduct(Product product) throws HibernateException;
 
