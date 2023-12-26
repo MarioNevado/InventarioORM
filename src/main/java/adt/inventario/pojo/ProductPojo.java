@@ -35,7 +35,7 @@ public class ProductPojo implements ProductDAO {
     }
 
     @Override
-    public void updateProduct(Product product) throws HibernateException{
+    public void updateProduct(Product product) throws HibernateException {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
@@ -52,7 +52,7 @@ public class ProductPojo implements ProductDAO {
     }
 
     @Override
-    public List<Product> list() throws HibernateException{
+    public List<Product> list() throws HibernateException {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Product> query = session.createQuery("FROM Product", Product.class);
             return query.list();
@@ -65,19 +65,22 @@ public class ProductPojo implements ProductDAO {
     public void use(int number, String productName) throws UsedUnitsExceedException {
         Product product;
         product = new Product((String) getProductByName(productName)[0], (int) getProductByName(productName)[1]);
-        product.setAmount(product.getAmount() - number);
+
         if (product.getAmount() < number) throw new UsedUnitsExceedException("No hay tantas unidades disponibles");
-        else if (product.getAmount() == number) removeProduct(productName);
-        else updateProduct(product);
+        else if (product.getAmount() == number) removeProduct(product);
+        else {
+            product.setAmount(product.getAmount() - number);
+            updateProduct(product);
+        }
     }
 
     @Override
-    public void removeProduct(String productName) throws HibernateException{
+    public void removeProduct(Product product) throws HibernateException {
         Transaction tx = null;
-        Product product;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
-            product = session.get(Product.class, productName);
+            product.setId(getId(product));
+            product = session.get(Product.class, product.getId());
             if (product != null) {
                 session.remove(product);
             }
@@ -91,7 +94,7 @@ public class ProductPojo implements ProductDAO {
     }
 
     @Override
-    public long hasProduct(Product product) throws HibernateException{
+    public long hasProduct(Product product) throws HibernateException {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder cb = session.getCriteriaBuilder(); //constructor
             CriteriaQuery<Long> cQuery = cb.createQuery(Long.class); //query que indica que devolverá long
@@ -115,7 +118,7 @@ public class ProductPojo implements ProductDAO {
     }
 
     @Override
-    public Object[] getProductByName(String productName) throws HibernateException{
+    public Object[] getProductByName(String productName) throws HibernateException {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder cb = session.getCriteriaBuilder();
             CriteriaQuery<Object[]> cQuery = cb.createQuery(Object[].class);
@@ -130,14 +133,14 @@ public class ProductPojo implements ProductDAO {
 
     @Override
     public int getId(Product product) throws HibernateException {
-        try(Session session = HibernateUtil.getSessionFactory().openSession()){
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder cb = session.getCriteriaBuilder();
             CriteriaQuery<Integer> criteriaQuery = cb.createQuery(Integer.class);
             Root<Product> root = criteriaQuery.from(Product.class);
             criteriaQuery.select(root.get("id")).where(cb.equal(root.get("name"), product.getName()));
             Query<Integer> query = session.createQuery(criteriaQuery);
             return query.getSingleResult();
-        }catch (HibernateException h){
+        } catch (HibernateException h) {
             throw h;
         }
     }
