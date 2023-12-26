@@ -77,7 +77,7 @@ public class Main {
     }
     private static void hasProduct(String command){
         String product = command.split(" ", 2)[1];
-        System.out.println(pojo.getSupplies(new Product(product, 1)));
+        System.out.println("Unidades disponibles: " + pojo.getSupplies(new Product(product, 1)));
     }
     private static void useProduct(String command) {
         String product;
