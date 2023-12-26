@@ -22,6 +22,7 @@ public class CSVReader {
         Product product;
         ProductPojo pojo = new ProductPojo();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            reader.readLine();
             while((line = reader.readLine()) != null){
                 line = line.toLowerCase();
                 product = new Product(line.split(";", 2)[1], Integer.parseInt(line.split(";", 2)[0]));
@@ -35,7 +36,7 @@ public class CSVReader {
         } catch (IOException ioex) {
             throw new IOException("Error leyendo el fichero");
         }catch(NumberFormatException nf){
-            throw new NumberFormatException("Error intentando obtener la cantidad del producto" + line);
+            throw new NumberFormatException("Error intentando obtener la cantidad del producto " + line);
         }
     }
 }
