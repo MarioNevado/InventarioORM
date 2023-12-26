@@ -62,7 +62,7 @@ public class Main {
                 for (Product p : pojo.list()){
                     System.out.println(p);
                 }
-            } else if (command.matches("^usar [0-9]+ [a-z]+$")) {
+            } else if (command.matches("^usar [0-9]+ [a-z]+[ [a-z]]*$")) {
                 useProduct(command);
             } else if (command.matches("^hay [a-z]+$")) {
                 hasProduct(command);
