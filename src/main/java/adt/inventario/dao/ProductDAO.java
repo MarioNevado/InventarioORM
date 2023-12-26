@@ -25,4 +25,6 @@ public interface ProductDAO {
 
     int getId(Product product) throws HibernateException;
 
+    int getSupplies(Product product) throws HibernateException;
+
 }

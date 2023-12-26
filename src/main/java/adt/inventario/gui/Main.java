@@ -64,7 +64,7 @@ public class Main {
                 }
             } else if (command.matches("^usar [0-9]+ [a-z]+[ [a-z]]*$")) {
                 useProduct(command);
-            } else if (command.matches("^hay [a-z]+$")) {
+            } else if (command.matches("^hay [a-z]+[ [a-z]]*$")) {
                 hasProduct(command);
             } else if (command.matches(("adquirir [a-z]+"))) {
                 pojo.getProduct(command.split(" ", 2)[1]);
@@ -76,8 +76,8 @@ public class Main {
         }
     }
     private static void hasProduct(String command){
-        String product = command.split(" ", 3)[2];
-        System.out.println(pojo.hasProduct(new Product(product, 1)));
+        String product = command.split(" ", 2)[1];
+        System.out.println(pojo.getSupplies(new Product(product, 1)));
     }
     private static void useProduct(String command) {
         String product;
