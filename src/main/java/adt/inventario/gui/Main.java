@@ -4,6 +4,8 @@ package adt.inventario.gui;
 import adt.inventario.model.Product;
 import adt.inventario.pojo.ProductPojo;
 import adt.inventario.utils.CSVReader;
+import adt.inventario.utils.HibernateUtil;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
@@ -51,6 +53,7 @@ public class Main {
                 selectOption(command);
             }
         } while (!command.equalsIgnoreCase("salir"));
+        HibernateUtil.shutdown();
     }
 
     private static void selectOption(String command) {
