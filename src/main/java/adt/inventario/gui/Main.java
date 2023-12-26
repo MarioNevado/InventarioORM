@@ -1,6 +1,7 @@
 package adt.inventario.gui;
 
 
+import adt.inventario.model.Product;
 import adt.inventario.pojo.ProductPojo;
 import adt.inventario.utils.CSVReader;
 import java.io.File;
@@ -55,7 +56,9 @@ public class Main {
     private static void selectOption(String command) {
         try {
             if (command.equals("listar")) {
-                pojo.list();
+                for (Product p : pojo.list()){
+                    System.out.println(p);
+                }
             } else if (command.matches("^usar [0-9]+ [a-z]+$")) {
                 useProduct(command);
             } else if (command.matches("^hay [a-z]+$")) {
@@ -71,7 +74,7 @@ public class Main {
     }
     private static void hasProduct(String command){
         String product = command.split(" ", 3)[2];
-        System.out.println(pojo.hasProduct(product));
+        System.out.println(pojo.hasProduct(new Product(product, 1)));
     }
     private static void useProduct(String command) {
         String product;
