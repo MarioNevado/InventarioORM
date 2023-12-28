@@ -163,18 +163,4 @@ public class ProductPojo implements ProductDAO {
             throw h;
         }
     }
-
-    @Override
-    public int getSupplies(Product product) throws HibernateException {
-        try(Session session = HibernateUtil.getSessionFactory().openSession()){
-            CriteriaBuilder cb = session.getCriteriaBuilder();
-            CriteriaQuery<Integer> criteriaQuery = cb.createQuery(Integer.class);
-            Root<Product> root = criteriaQuery.from(Product.class);
-            criteriaQuery.select(root.get("amount")).where(cb.equal(root.get("id"), getId(product)));
-            Query<Integer> query = session.createQuery(criteriaQuery);
-            return query.getSingleResult();
-        }catch(HibernateException h){
-            throw h;
-        }
-    }
 }
