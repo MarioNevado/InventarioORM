@@ -120,7 +120,6 @@ public class ProductPojo implements ProductDAO {
             throw h;
         }
     }
-
     @Override
     public void getProduct(String productName, int units) throws NegativeGettedUnitsException {
         Product product;
@@ -136,8 +135,6 @@ public class ProductPojo implements ProductDAO {
             addProduct(new Product(productName, units));
         }
     }
-
-    //TODO cambiar la busqueda por id o mantenerla por nombre
     @Override
     public Product getProductByName(String productName) throws HibernateException {
         Product product;
