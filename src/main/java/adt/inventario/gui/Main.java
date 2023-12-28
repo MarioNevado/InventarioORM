@@ -1,6 +1,7 @@
 package adt.inventario.gui;
 
 
+import adt.inventario.exceptions.IncorrectAcquiredUnitsException;
 import adt.inventario.exceptions.UsedUnitsExceedException;
 import adt.inventario.model.Product;
 import adt.inventario.pojo.ProductPojo;
@@ -58,17 +59,18 @@ public class Main {
         HibernateUtil.shutdown();
     }
 
-    private static void help(){
+    private static void help() {
         System.out.println("\"listar\" -> Muestra suministros disponibles");
         System.out.println("\"usar x suministro\" -> Usar x unidades del suministro");
         System.out.println("\"hay suministro\" -> Muestra las unidades disponibles del suministro");
         System.out.println("\"adquirir x suministro\" -> La base de datos adquiere una unidad de ese suministro");
         System.out.println("\"salir\" -> Salida controlada del programa");
     }
+
     private static void selectOption(String command) {
         try {
             if (command.equals("listar")) {
-                for (Product p : pojo.list()){
+                for (Product p : pojo.list()) {
                     System.out.println(p);
                 }
             } else if (command.matches("^usar [0-9]+ [a-z]+[ a-z]*$")) {
@@ -76,7 +78,11 @@ public class Main {
             } else if (command.matches("^hay [a-z]+[ a-z]*$")) {
                 hasProduct(command);
             } else if (command.matches(("^adquirir -?[0-9]* [a-z]+[ a-z]*$"))) {
-                pojo.getProduct(command.split(" ", 3)[2], Integer.parseInt(command.split(" ", 3)[1]));
+                try {
+                    pojo.getProduct(command.split(" ", 3)[2], Integer.parseInt(command.split(" ", 3)[1]));
+                } catch (IncorrectAcquiredUnitsException ngu) {
+                    System.err.println(ngu.getMessage());
+                }
             } else {
                 System.err.println("COMANDO INCORRECTO");
                 help();
@@ -85,15 +91,17 @@ public class Main {
             e.printStackTrace();
         }
     }
-    private static void hasProduct(String command){
+
+    private static void hasProduct(String command) {
         String product = command.split(" ", 2)[1];
         if (!pojo.hasProduct(product).isEmpty()) {
             System.out.println("Coincidencias: ");
             for (Product p : pojo.hasProduct(product)) {
                 System.out.println(p);
             }
-        }else System.err.println("No hay coincidencias");
+        } else System.err.println("No hay coincidencias");
     }
+
     private static void useProduct(String command) {
         String product;
         int number;
@@ -103,9 +111,9 @@ public class Main {
             pojo.use(number, product);
         } catch (NumberFormatException nf) {
             System.err.println("Debe pasar un número como parámetro");
-        } catch(UsedUnitsExceedException uue){
+        } catch (UsedUnitsExceedException uue) {
             System.err.println(uue.getMessage());
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
