@@ -62,7 +62,7 @@ public class Main {
         System.out.println("\"listar\" -> Muestra suministros disponibles");
         System.out.println("\"usar x suministro\" -> Usar x unidades del suministro");
         System.out.println("\"hay suministro\" -> Muestra las unidades disponibles del suministro");
-        System.out.println("\"adquirir suministro\" -> La base de datos adquiere una unidad de ese suministro");
+        System.out.println("\"adquirir x suministro\" -> La base de datos adquiere una unidad de ese suministro");
         System.out.println("\"salir\" -> Salida controlada del programa");
     }
     private static void selectOption(String command) {
@@ -75,8 +75,8 @@ public class Main {
                 useProduct(command);
             } else if (command.matches("^hay [a-z]+[ a-z]*$")) {
                 hasProduct(command);
-            } else if (command.matches(("adquirir [a-z]+[ a-z]*$"))) {
-                pojo.getProduct(command.split(" ", 2)[1]);
+            } else if (command.matches(("^adquirir -?[0-9]* [a-z]+[ a-z]*$"))) {
+                pojo.getProduct(command.split(" ", 3)[2], Integer.parseInt(command.split(" ", 3)[1]));
             } else {
                 System.err.println("COMANDO INCORRECTO");
                 help();

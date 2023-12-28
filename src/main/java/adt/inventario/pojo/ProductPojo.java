@@ -1,6 +1,7 @@
 package adt.inventario.pojo;
 
 import adt.inventario.dao.ProductDAO;
+import adt.inventario.exceptions.NegativeGettedUnitsException;
 import adt.inventario.exceptions.UsedUnitsExceedException;
 import adt.inventario.model.Product;
 import adt.inventario.utils.HibernateUtil;
@@ -11,6 +12,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+
 import java.util.List;
 
 public class ProductPojo implements ProductDAO {
@@ -97,7 +99,7 @@ public class ProductPojo implements ProductDAO {
             CriteriaBuilder cb = session.getCriteriaBuilder(); //constructor
             CriteriaQuery<Product> cQuery = cb.createQuery(Product.class); //query que indica que devolverá long
             Root<Product> root = cQuery.from(Product.class); // referencia la clase de origen de la consulta
-            cQuery.multiselect(root.get("name"), root.get("amount")).where(cb.like(root.get("name"), "%"+productName+"%")).orderBy(cb.asc(root.get("name")));
+            cQuery.multiselect(root.get("name"), root.get("amount")).where(cb.like(root.get("name"), "%" + productName + "%")).orderBy(cb.asc(root.get("name")));
             Query<Product> query = session.createQuery(cQuery);
             return query.list();
         } catch (HibernateException h) {
@@ -120,14 +122,18 @@ public class ProductPojo implements ProductDAO {
     }
 
     @Override
-    public void getProduct(String productName) {
+    public void getProduct(String productName, int units) throws NegativeGettedUnitsException {
         Product product;
         if (!hasProduct((productName)).isEmpty()) {
-            product = getProductByName(productName);
-            product.setAmount(product.getAmount() + 1);
-            updateProduct(product);
-        }else{
-            addProduct(new Product(productName, 1));
+            if (units < 0)throw new NegativeGettedUnitsException("La base de datos no puede adquirir unidades negativas");
+            else if (units == 0) throw new NegativeGettedUnitsException("La base de datos no adquiere nada");
+            else {
+                product = getProductByName(productName);
+                product.setAmount(product.getAmount() + units);
+                updateProduct(product);
+            }
+        } else {
+            addProduct(new Product(productName, units));
         }
     }
 
@@ -141,7 +147,7 @@ public class ProductPojo implements ProductDAO {
             Root<Product> root = cQuery.from(Product.class);
             cQuery.multiselect(root.get("id"), root.get("name"), root.get("amount")).where(cb.equal(root.get("name"), productName));
             Query<Object[]> query = session.createQuery(cQuery);
-            product = new Product((String)query.getSingleResult()[1], (Integer)query.getSingleResult()[2]);
+            product = new Product((String) query.getSingleResult()[1], (Integer) query.getSingleResult()[2]);
             product.setId((Integer) query.getSingleResult()[0]);
             return product;
         } catch (HibernateException h) {
