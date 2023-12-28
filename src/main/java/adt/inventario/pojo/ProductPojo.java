@@ -90,15 +90,30 @@ public class ProductPojo implements ProductDAO {
         }
     }
 
+    //TODO no tiene que devolver el numero de unidades disponibles, sino todos los productos con el nombre pasado
     @Override
-    public long hasProduct(Product product) throws HibernateException {
+    public List<Product> hasProduct(String productName) throws HibernateException {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder cb = session.getCriteriaBuilder(); //constructor
-            CriteriaQuery<Long> cQuery = cb.createQuery(Long.class); //query que indica que devolverá long
+            CriteriaQuery<Product> cQuery = cb.createQuery(Product.class); //query que indica que devolverá long
             Root<Product> root = cQuery.from(Product.class); // referencia la clase de origen de la consulta
-            cQuery.select(cb.count(root)).where(cb.equal(root.get("name"), product.getName()));
-            Query<Long> query = session.createQuery(cQuery);
-            return query.getSingleResult();
+            cQuery.multiselect(root.get("name"), root.get("amount")).where(cb.like(root.get("name"), "%"+productName+"%")).orderBy(cb.asc(root.get("name")));
+            Query<Product> query = session.createQuery(cQuery);
+            return query.list();
+        } catch (HibernateException h) {
+            throw h;
+        }
+    }
+
+    @Override
+    public boolean isAdded(String productName) throws HibernateException {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            CriteriaBuilder cb = session.getCriteriaBuilder(); //constructor
+            CriteriaQuery<Product> cQuery = cb.createQuery(Product.class); //query que indica que devolverá long
+            Root<Product> root = cQuery.from(Product.class); // referencia la clase de origen de la consulta
+            cQuery.multiselect(root.get("name"), root.get("amount")).where(cb.equal(root.get("name"), productName)).orderBy(cb.asc(root.get("name")));
+            Query<Product> query = session.createQuery(cQuery);
+            return query.list().isEmpty();
         } catch (HibernateException h) {
             throw h;
         }
@@ -107,7 +122,7 @@ public class ProductPojo implements ProductDAO {
     @Override
     public void getProduct(String productName) {
         Product product;
-        if (hasProduct(new Product(productName, 1)) != 0) {
+        if (!hasProduct((productName)).isEmpty()) {
             product = getProductByName(productName);
             product.setAmount(product.getAmount() + 1);
             updateProduct(product);
