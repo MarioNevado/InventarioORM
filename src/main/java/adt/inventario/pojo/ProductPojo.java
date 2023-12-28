@@ -42,7 +42,6 @@ public class ProductPojo implements ProductDAO {
             product.setId(getId(product));
             session.merge(product);
             tx.commit();
-            System.out.println("Actualizado el producto " + product.getName() + " con cantidad de " + product.getAmount());
         } catch (HibernateException h) {
             if (tx != null) {
                 tx.rollback();
