@@ -1,6 +1,7 @@
 package adt.inventario.gui;
 
 
+import adt.inventario.exceptions.UsedUnitsExceedException;
 import adt.inventario.model.Product;
 import adt.inventario.pojo.ProductPojo;
 import adt.inventario.utils.CSVReader;
@@ -88,7 +89,9 @@ public class Main {
             pojo.use(number, product);
         } catch (NumberFormatException nf) {
             System.err.println("Debe pasar un número como parámetro");
-        } catch (Exception e) {
+        } catch(UsedUnitsExceedException uue){
+            System.err.println(uue.getMessage());
+        }catch (Exception e) {
             e.printStackTrace();
         }
     }
