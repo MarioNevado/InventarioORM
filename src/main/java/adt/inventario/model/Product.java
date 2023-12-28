@@ -17,7 +17,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return name + ": " + amount;
+        return "ID " + id + ": " + name + "-> " + amount + " unidades";
     }
 
     public Product(String name, int amount) {
