@@ -12,6 +12,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ProductPojo implements ProductDAO {
@@ -110,7 +111,8 @@ public class ProductPojo implements ProductDAO {
     public void getProduct(String productName) {
         Product product;
         if (hasProduct(new Product(productName, 1)) != 0) {
-            product = new Product((String) getProductByName(productName)[0], (Integer) getProductByName(productName)[1]);
+            product = new Product((String)getProductByName(productName)[1], (Integer) getProductByName(productName)[2]);
+            product.setId((Integer)getProductByName(productName)[0]);
             product.setAmount(product.getAmount() + 1);
             updateProduct(product);
         }else{
@@ -124,7 +126,7 @@ public class ProductPojo implements ProductDAO {
             CriteriaBuilder cb = session.getCriteriaBuilder();
             CriteriaQuery<Object[]> cQuery = cb.createQuery(Object[].class);
             Root<Product> root = cQuery.from(Product.class);
-            cQuery.multiselect(root.get("name"), root.get("amount")).where(cb.equal(root.get("name"), productName));
+            cQuery.multiselect(root.get("id"), root.get("name"), root.get("amount")).where(cb.equal(root.get("name"), productName));
             Query<Object[]> query = session.createQuery(cQuery);
             return query.getSingleResult();
         } catch (HibernateException h) {
