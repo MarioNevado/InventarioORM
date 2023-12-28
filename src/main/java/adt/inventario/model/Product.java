@@ -17,12 +17,17 @@ public class Product {
 
     @Override
     public String toString() {
-        return "ID " + id + ": " + name + "-> " + amount + " unidades";
+        String unit;
+        if (amount > 1) unit = " unidades";
+        else return unit = " unidad";
+        return name + "-> " + amount + unit;
     }
-
-    public Product(String name, int amount) {
+    public Product(String name, int amount){
+        setName(name);
+        setAmount(amount);
+    }
+    public void setName(String name) {
         this.name = name;
-        this.amount = amount;
     }
     public void setId(int id) {
         this.id = id;
