@@ -91,7 +91,6 @@ public class ProductPojo implements ProductDAO {
         }
     }
 
-    //TODO no tiene que devolver el numero de unidades disponibles, sino todos los productos con el nombre pasado
     @Override
     public List<Product> hasProduct(String productName) throws HibernateException {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
