@@ -114,6 +114,8 @@ public class ProductPojo implements ProductDAO {
             product = new Product((String) getProductByName(productName)[0], (Integer) getProductByName(productName)[1]);
             product.setAmount(product.getAmount() + 1);
             updateProduct(product);
+        }else{
+            addProduct(new Product(productName, 1));
         }
     }
 
