@@ -62,7 +62,7 @@ public class ProductPojo implements ProductDAO {
     @Override
     public void use(int number, String productName) throws UsedUnitsExceedException {
         Product product;
-        product = new Product((String) getProductByName(productName)[0], (int) getProductByName(productName)[1]);
+        product = getProductByName(productName);
         if (product.getAmount() < number) throw new UsedUnitsExceedException("No hay tantas unidades disponibles");
         else if (product.getAmount() == number) removeProduct(product);
         else {
@@ -108,8 +108,7 @@ public class ProductPojo implements ProductDAO {
     public void getProduct(String productName) {
         Product product;
         if (hasProduct(new Product(productName, 1)) != 0) {
-            product = new Product((String)getProductByName(productName)[1], (Integer) getProductByName(productName)[2]);
-            product.setId((Integer)getProductByName(productName)[0]);
+            product = getProductByName(productName);
             product.setAmount(product.getAmount() + 1);
             updateProduct(product);
         }else{
@@ -119,14 +118,17 @@ public class ProductPojo implements ProductDAO {
 
     //TODO cambiar la busqueda por id o mantenerla por nombre
     @Override
-    public Object[] getProductByName(String productName) throws HibernateException {
+    public Product getProductByName(String productName) throws HibernateException {
+        Product product;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder cb = session.getCriteriaBuilder();
             CriteriaQuery<Object[]> cQuery = cb.createQuery(Object[].class);
             Root<Product> root = cQuery.from(Product.class);
             cQuery.multiselect(root.get("id"), root.get("name"), root.get("amount")).where(cb.equal(root.get("name"), productName));
             Query<Object[]> query = session.createQuery(cQuery);
-            return query.getSingleResult();
+            product = new Product((String)query.getSingleResult()[1], (Integer)query.getSingleResult()[2]);
+            product.setId((Integer) query.getSingleResult()[0]);
+            return product;
         } catch (HibernateException h) {
             throw h;
         }

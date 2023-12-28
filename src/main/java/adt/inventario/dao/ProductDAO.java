@@ -21,7 +21,7 @@ public interface ProductDAO {
 
     void getProduct(String productName);
 
-    Object[] getProductByName(String productName) throws HibernateException;
+    Product getProductByName(String productName) throws HibernateException;
 
     int getId(Product product) throws HibernateException;
 
