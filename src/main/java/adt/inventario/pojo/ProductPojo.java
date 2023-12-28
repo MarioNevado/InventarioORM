@@ -1,7 +1,7 @@
 package adt.inventario.pojo;
 
 import adt.inventario.dao.ProductDAO;
-import adt.inventario.exceptions.NegativeGettedUnitsException;
+import adt.inventario.exceptions.IncorrectAcquiredUnitsException;
 import adt.inventario.exceptions.UsedUnitsExceedException;
 import adt.inventario.model.Product;
 import adt.inventario.utils.HibernateUtil;
@@ -121,11 +121,11 @@ public class ProductPojo implements ProductDAO {
         }
     }
     @Override
-    public void getProduct(String productName, int units) throws NegativeGettedUnitsException {
+    public void getProduct(String productName, int units) throws IncorrectAcquiredUnitsException {
         Product product;
         if (!hasProduct((productName)).isEmpty()) {
-            if (units < 0)throw new NegativeGettedUnitsException("La base de datos no puede adquirir unidades negativas");
-            else if (units == 0) throw new NegativeGettedUnitsException("La base de datos no adquiere nada");
+            if (units < 0)throw new IncorrectAcquiredUnitsException("La base de datos no puede adquirir unidades negativas");
+            else if (units == 0) throw new IncorrectAcquiredUnitsException("La base de datos no adquiere nada");
             else {
                 product = getProductByName(productName);
                 product.setAmount(product.getAmount() + units);

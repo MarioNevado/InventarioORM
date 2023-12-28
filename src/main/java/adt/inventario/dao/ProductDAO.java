@@ -1,6 +1,6 @@
 package adt.inventario.dao;
 
-import adt.inventario.exceptions.NegativeGettedUnitsException;
+import adt.inventario.exceptions.IncorrectAcquiredUnitsException;
 import adt.inventario.exceptions.UsedUnitsExceedException;
 import adt.inventario.model.Product;
 import org.hibernate.HibernateException;
@@ -22,7 +22,7 @@ public interface ProductDAO {
 
     boolean isAdded(String productName) throws HibernateException;
 
-    void getProduct(String productName, int units) throws NegativeGettedUnitsException;
+    void getProduct(String productName, int units) throws IncorrectAcquiredUnitsException;
 
     Product getProductByName(String productName) throws HibernateException;
 
