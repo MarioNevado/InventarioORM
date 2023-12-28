@@ -19,7 +19,7 @@ public class Product {
     public String toString() {
         String unit;
         if (amount > 1) unit = " unidades";
-        else return unit = " unidad";
+        else unit = " unidad";
         return name + "-> " + amount + unit;
     }
     public Product(String name, int amount){
