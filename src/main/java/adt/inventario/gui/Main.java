@@ -87,7 +87,12 @@ public class Main {
     }
     private static void hasProduct(String command){
         String product = command.split(" ", 2)[1];
-        System.out.println("Unidades disponibles: " + pojo.getSupplies(new Product(product, 1)));
+        if (!pojo.hasProduct(product).isEmpty()) {
+            System.out.println("Coincidencias: ");
+            for (Product p : pojo.hasProduct(product)) {
+                System.out.println(p);
+            }
+        }else System.err.println("No hay coincidencias");
     }
     private static void useProduct(String command) {
         String product;
