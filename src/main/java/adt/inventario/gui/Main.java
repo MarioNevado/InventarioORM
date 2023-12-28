@@ -39,6 +39,7 @@ public class Main {
     static ProductPojo pojo;
 
     public static void main(String[] args) {
+        //TODO ocultar consultas internas en base a respuesta de Isma
         Scanner sc = new Scanner(System.in);
         String command;
         pojo = new ProductPojo();

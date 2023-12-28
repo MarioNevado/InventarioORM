@@ -117,6 +117,7 @@ public class ProductPojo implements ProductDAO {
         }
     }
 
+    //TODO cambiar la busqueda por id o mantenerla por nombre
     @Override
     public Object[] getProductByName(String productName) throws HibernateException {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
