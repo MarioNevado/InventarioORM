@@ -11,8 +11,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-
-import java.util.Arrays;
 import java.util.List;
 
 public class ProductPojo implements ProductDAO {
@@ -65,7 +63,6 @@ public class ProductPojo implements ProductDAO {
     public void use(int number, String productName) throws UsedUnitsExceedException {
         Product product;
         product = new Product((String) getProductByName(productName)[0], (int) getProductByName(productName)[1]);
-
         if (product.getAmount() < number) throw new UsedUnitsExceedException("No hay tantas unidades disponibles");
         else if (product.getAmount() == number) removeProduct(product);
         else {
