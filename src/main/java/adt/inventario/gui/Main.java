@@ -57,6 +57,13 @@ public class Main {
         HibernateUtil.shutdown();
     }
 
+    private static void help(){
+        System.out.println("\"listar\" -> Muestra suministros disponibles");
+        System.out.println("\"usar x suministro\" -> Usar x unidades del suministro");
+        System.out.println("\"hay suministro\" -> Muestra las unidades disponibles del suministro");
+        System.out.println("\"adquirir suministro\" -> La base de datos adquiere una unidad de ese suministro");
+        System.out.println("\"salir\" -> Salida controlada del programa");
+    }
     private static void selectOption(String command) {
         try {
             if (command.equals("listar")) {
@@ -71,6 +78,7 @@ public class Main {
                 pojo.getProduct(command.split(" ", 2)[1]);
             } else {
                 System.err.println("COMANDO INCORRECTO");
+                help();
             }
         } catch (Exception e) {
             e.printStackTrace();
