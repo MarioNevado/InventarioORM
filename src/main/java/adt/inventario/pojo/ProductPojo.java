@@ -63,9 +63,7 @@ public class ProductPojo implements ProductDAO {
     }
 
     @Override
-    public void use(int number, String productName) throws UsedUnitsExceedException {
-        Product product;
-        product = getProductByName(productName);
+    public void use(int number, Product product) throws UsedUnitsExceedException {
         if (product.getAmount() < number) throw new UsedUnitsExceedException("No hay tantas unidades disponibles");
         else if (product.getAmount() == number) removeProduct(product);
         else {
