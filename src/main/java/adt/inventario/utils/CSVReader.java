@@ -26,7 +26,7 @@ public class CSVReader {
             while((line = reader.readLine()) != null){
                 line = line.toLowerCase().trim();
                 product = new Product(line.split(";", 2)[1], Integer.parseInt(line.split(";", 2)[0]));
-                if (pojo.isAdded(product.getName())){
+                if (pojo.isNew(product.getName())){
                     pojo.addProduct(product);
                 }else {
                     product.setAmount(pojo.getProductByName(product.getName()).getAmount());
