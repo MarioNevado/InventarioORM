@@ -20,7 +20,7 @@ public interface ProductDAO {
 
     List<Product> hasProduct(String productName) throws HibernateException;
 
-    boolean isAdded(String productName) throws HibernateException;
+    boolean isNew(String productName) throws HibernateException;
 
     void getProduct(String productName, int units) throws IncorrectAcquiredUnitsException;
 

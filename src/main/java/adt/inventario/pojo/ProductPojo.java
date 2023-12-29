@@ -108,7 +108,7 @@ public class ProductPojo implements ProductDAO {
     }
 
     @Override
-    public boolean isAdded(String productName) throws HibernateException {
+    public boolean isNew(String productName) throws HibernateException {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder cb = session.getCriteriaBuilder(); //constructor
             CriteriaQuery<Product> cQuery = cb.createQuery(Product.class); //query que indica que devolverá long
