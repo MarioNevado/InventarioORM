@@ -108,7 +108,7 @@ public class Main {
         try {
             number = Integer.parseInt(command.split(" ", 3)[1]);
             product = command.split(" ", 3)[2];
-            pojo.use(number, product);
+            pojo.use(number, pojo.getProductByName(product));
         } catch (NumberFormatException nf) {
             System.err.println("Debe pasar un número como parámetro");
         } catch (UsedUnitsExceedException uue) {
