@@ -5,6 +5,7 @@ import adt.inventario.exceptions.IncorrectAcquiredUnitsException;
 import adt.inventario.exceptions.UsedUnitsExceedException;
 import adt.inventario.model.Product;
 import adt.inventario.utils.HibernateUtil;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
@@ -88,6 +89,7 @@ public class ProductPojo implements ProductDAO {
             throw h;
         }
     }
+
     @Override
     public List<Product> hasProduct(String productName) throws HibernateException {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -115,21 +117,26 @@ public class ProductPojo implements ProductDAO {
             throw h;
         }
     }
+
     @Override
     public void getProduct(String productName, int units) throws IncorrectAcquiredUnitsException {
         Product product;
-        if (!hasProduct((productName)).isEmpty()) {
-            if (units < 0)throw new IncorrectAcquiredUnitsException("La base de datos no puede adquirir unidades negativas");
-            else if (units == 0) throw new IncorrectAcquiredUnitsException("La base de datos no adquiere nada");
-            else {
-                product = getProductByName(productName);
-                product.setAmount(product.getAmount() + units);
-                updateProduct(product);
-            }
+        if (units < 0)
+            throw new IncorrectAcquiredUnitsException("La base de datos no puede adquirir unidades negativas");
+        else if (units == 0) throw new IncorrectAcquiredUnitsException("La base de datos no adquiere nada");
+        try {
+            product = getProductByName(productName);
+        } catch (NoResultException nre) {
+            product = new Product(productName, units);
+        }
+        if (!isNew(product)) {
+            product.setAmount(product.getAmount() + units);
+            updateProduct(product);
         } else {
-            addProduct(new Product(productName, units));
+            addProduct(product);
         }
     }
+
     @Override
     public Product getProductByName(String productName) throws HibernateException {
         Product product;
