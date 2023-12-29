@@ -53,7 +53,6 @@ public class ProductPojo implements ProductDAO {
     }
 
     @Override
-    //TODO preguntar que es eso de buscar por id
     public List<Product> list() throws HibernateException {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Product> query = session.createQuery("FROM Product", Product.class);
