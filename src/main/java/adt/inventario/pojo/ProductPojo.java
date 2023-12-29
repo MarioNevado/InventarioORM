@@ -77,8 +77,6 @@ public class ProductPojo implements ProductDAO {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             tx = session.beginTransaction();
-            product.setId(getId(product));
-            product = session.get(Product.class, product.getId());
             if (product != null) {
                 session.remove(product);
             }
@@ -90,7 +88,6 @@ public class ProductPojo implements ProductDAO {
             throw h;
         }
     }
-
     @Override
     public List<Product> hasProduct(String productName) throws HibernateException {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -106,12 +103,12 @@ public class ProductPojo implements ProductDAO {
     }
 
     @Override
-    public boolean isNew(String productName) throws HibernateException {
+    public boolean isNew(Product product) throws HibernateException {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             CriteriaBuilder cb = session.getCriteriaBuilder(); //constructor
             CriteriaQuery<Product> cQuery = cb.createQuery(Product.class); //query que indica que devolverá long
             Root<Product> root = cQuery.from(Product.class); // referencia la clase de origen de la consulta
-            cQuery.multiselect(root.get("name"), root.get("amount")).where(cb.equal(root.get("name"), productName)).orderBy(cb.asc(root.get("name")));
+            cQuery.multiselect(root.get("name"), root.get("amount")).where(cb.equal(root.get("name"), product.getName())).orderBy(cb.asc(root.get("name")));
             Query<Product> query = session.createQuery(cQuery);
             return query.list().isEmpty();
         } catch (HibernateException h) {
