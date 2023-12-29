@@ -19,16 +19,16 @@ import java.util.List;
 public class ProductPojo implements ProductDAO {
     @Override
     public void addProduct(Product product) throws HibernateException {
-        Transaction tx = null;
+        Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             if (product != null) {
-                tx = session.beginTransaction();
+                transaction = session.beginTransaction();
                 session.persist(product);
-                tx.commit();
+                transaction.commit();
             } else throw new HibernateException("El producto está vacío");
         } catch (HibernateException h) {
-            if (tx != null) {
-                tx.rollback();
+            if (transaction != null) {
+                transaction.rollback();
             }
             throw new HibernateException("Error intentando añadir el producto " + product);
         }
@@ -38,15 +38,15 @@ public class ProductPojo implements ProductDAO {
 
     @Override
     public void updateProduct(Product product) throws HibernateException {
-        Transaction tx = null;
+        Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            tx = session.beginTransaction();
+            transaction = session.beginTransaction();
             product.setId(getId(product));
             session.merge(product);
-            tx.commit();
+            transaction.commit();
         } catch (HibernateException h) {
-            if (tx != null) {
-                tx.rollback();
+            if (transaction != null) {
+                transaction.rollback();
             }
             throw new HibernateException("Error actualizando");
         }
@@ -74,16 +74,16 @@ public class ProductPojo implements ProductDAO {
 
     @Override
     public void removeProduct(Product product) throws HibernateException {
-        Transaction tx = null;
+        Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            tx = session.beginTransaction();
+            transaction = session.beginTransaction();
             if (product != null) {
                 session.remove(product);
             }
-            tx.commit();
+            transaction.commit();
         } catch (HibernateException h) {
-            if (tx != null) {
-                tx.rollback();
+            if (transaction != null) {
+                transaction.rollback();
             }
             throw h;
         }
