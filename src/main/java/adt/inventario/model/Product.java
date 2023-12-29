@@ -15,6 +15,10 @@ public class Product {
 
     public Product() {}
 
+    public Product(String name, int amount){
+        setName(name);
+        setAmount(amount);
+    }
     @Override
     public String toString() {
         String unit;
@@ -22,10 +26,7 @@ public class Product {
         else unit = " unidad";
         return name + "-> " + amount + unit;
     }
-    public Product(String name, int amount){
-        setName(name);
-        setAmount(amount);
-    }
+
     public void setName(String name) {
         this.name = name;
     }
