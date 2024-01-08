@@ -39,4 +39,7 @@ public class CSVReader {
             throw new NumberFormatException("Error intentando obtener la cantidad del producto " + line);
         }
     }
+    public File getFile() {
+        return file;
+    }
 }

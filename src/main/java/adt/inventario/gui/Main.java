@@ -38,14 +38,16 @@ o parando el proceso de ejecución.
 
 public class Main {
     static ProductPojo pojo;
+    static CSVReader csv;
 
     public static void main(String[] args) {
         //TODO ocultar consultas internas en base a respuesta de Isma
         Scanner sc = new Scanner(System.in);
         String command;
+        final String path = "files/compra.csv";
         pojo = new ProductPojo();
         try {
-            new CSVReader(new File("files/compra.csv"));
+            csv = new CSVReader(new File(path));
         } catch (IOException io) {
             io.printStackTrace();
         }
@@ -64,6 +66,7 @@ public class Main {
         System.out.println("\"usar x suministro\" -> Usar x unidades del suministro");
         System.out.println("\"hay suministro\" -> Muestra las unidades disponibles del suministro");
         System.out.println("\"adquirir x suministro\" -> La base de datos adquiere una unidad de ese suministro");
+        System.out.println("\"reiniciar\" -> Reinicia el sistema");
         System.out.println("\"salir\" -> Salida controlada del programa");
     }
 
@@ -83,6 +86,8 @@ public class Main {
                 } catch (IncorrectAcquiredUnitsException iau) {
                     System.err.println(iau.getMessage());
                 }
+            } else if (command.equals("reiniciar")) {
+                pojo.restart(csv);
             } else {
                 System.err.println("COMANDO INCORRECTO");
                 help();

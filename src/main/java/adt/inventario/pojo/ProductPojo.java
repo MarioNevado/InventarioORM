@@ -4,6 +4,7 @@ import adt.inventario.dao.ProductDAO;
 import adt.inventario.exceptions.IncorrectAcquiredUnitsException;
 import adt.inventario.exceptions.UsedUnitsExceedException;
 import adt.inventario.model.Product;
+import adt.inventario.utils.CSVReader;
 import adt.inventario.utils.HibernateUtil;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -14,6 +15,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.io.IOException;
 import java.util.List;
 
 public class ProductPojo implements ProductDAO {
@@ -164,6 +166,18 @@ public class ProductPojo implements ProductDAO {
             return query.getSingleResult();
         } catch (HibernateException h) {
             throw h;
+        }
+    }
+
+    @Override
+    public void restart(CSVReader csv) throws IOException{
+        for (Product product : list()){
+            removeProduct(product);
+        }
+        try {
+            csv = new CSVReader(csv.getFile());
+        } catch (IOException e) {
+            throw new IOException("Error intentando reiniciar la base de datos");
         }
     }
 }

@@ -3,8 +3,10 @@ package adt.inventario.dao;
 import adt.inventario.exceptions.IncorrectAcquiredUnitsException;
 import adt.inventario.exceptions.UsedUnitsExceedException;
 import adt.inventario.model.Product;
+import adt.inventario.utils.CSVReader;
 import org.hibernate.HibernateException;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface ProductDAO {
@@ -27,5 +29,7 @@ public interface ProductDAO {
     Product getProductByName(String productName) throws HibernateException;
 
     int getId(Product product) throws HibernateException;
+
+    void restart(CSVReader csv) throws IOException;
 
 }
