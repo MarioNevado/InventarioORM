@@ -11,7 +11,7 @@
         <property name="dialect"> org.hibernate.dialect.MariaDBDialect</property>
 
         <!-- Configuration of the SQL query display mode -->
-        <property name="show_sql">true</property>
+        <property name="show_sql">false</property>
 
         <!--DDL generation configuration (create, update, validate, none -->
         <property name="hbm2ddl.auto">update</property>

@@ -58,6 +58,7 @@ public class Main {
                 selectOption(command);
             }
         } while (!command.equalsIgnoreCase("salir"));
+        System.out.println("Hasta pronto!");
         HibernateUtil.shutdown();
     }
 
