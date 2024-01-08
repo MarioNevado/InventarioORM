@@ -80,8 +80,8 @@ public class Main {
             } else if (command.matches(("^adquirir -?[0-9]* [a-z]+[ a-z]*$"))) {
                 try {
                     pojo.getProduct(command.split(" ", 3)[2], Integer.parseInt(command.split(" ", 3)[1]));
-                } catch (IncorrectAcquiredUnitsException ngu) {
-                    System.err.println(ngu.getMessage());
+                } catch (IncorrectAcquiredUnitsException iau) {
+                    System.err.println(iau.getMessage());
                 }
             } else {
                 System.err.println("COMANDO INCORRECTO");
