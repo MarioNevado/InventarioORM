@@ -1,0 +1,6 @@
+listar;Muestra suministros disponibles
+usar x suministro;Usar x unidades del suministro
+hay suministro;Muestra las unidades disponibles del suministro
+adquirir x suministro;La base de datos adquiere una unidad de ese suministro
+reiniciar;Reinicia el sistema
+salir;Salida controlada del programa

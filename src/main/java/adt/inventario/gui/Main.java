@@ -8,8 +8,7 @@ import adt.inventario.pojo.ProductPojo;
 import adt.inventario.utils.CSVReader;
 import adt.inventario.utils.HibernateUtil;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 
 /*
@@ -63,12 +62,15 @@ public class Main {
     }
 
     private static void help() {
-        System.out.println("\"listar\" -> Muestra suministros disponibles");
-        System.out.println("\"usar x suministro\" -> Usar x unidades del suministro");
-        System.out.println("\"hay suministro\" -> Muestra las unidades disponibles del suministro");
-        System.out.println("\"adquirir x suministro\" -> La base de datos adquiere una unidad de ese suministro");
-        System.out.println("\"reiniciar\" -> Reinicia el sistema");
-        System.out.println("\"salir\" -> Salida controlada del programa");
+        String line;
+        try(BufferedReader reader = new BufferedReader(new FileReader("files/help.csv"))){
+            while((line = reader.readLine()) != null){
+                line = line.replace(";", " -> ");
+                System.out.println(line);
+            }
+        }catch(IOException io){
+            System.err.println("Error en BufferedReader");
+        }
     }
 
     private static void selectOption(String command) {
